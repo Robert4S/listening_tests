@@ -1,0 +1,66 @@
+<header class="px-4 sm:px-6 lg:px-8">
+  <div class="flex items-center justify-between border-b border-zinc-100 py-3 text-sm">
+    <div class="flex items-center gap-4">
+      <a href="/">
+        <img src={~p"/images/logo.png"} width="80" />
+      </a>
+    </div>
+    <.dropdown id="grr-bop">
+      <:button>
+        Options <.chevron_down />
+      </:button>
+
+      <:content>
+        <div class="flex  flex-col gap-1 min-w-[240px] p-2 font-sans text-base font-normal text-gray-700">
+          <.link patch={~p"/dashboard"}>
+            <div
+              role="button"
+              tabindex="0"
+              class="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-50 hover:bg-opacity-80 focus:bg-blue-50 focus:bg-opacity-80 active:bg-gray-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none"
+            >
+              <div class="grid place-items-center mr-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  viewBox="0 -960 960 960"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path d="M520-600v-240h320v240H520ZM120-440v-400h320v400H120Zm400 320v-400h320v400H520Zm-400 0v-240h320v240H120Zm80-400h160v-240H200v240Zm400 320h160v-240H600v240Zm0-480h160v-80H600v80ZM200-200h160v-80H200v80Zm160-320Zm240-160Zm0 240ZM360-280Z" />
+                </svg>
+              </div>
+              Teacher Dashboard
+            </div>
+          </.link>
+
+          <.link patch={~p"/join"}>
+            <div
+              role="button"
+              tabindex="0"
+              class="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-50 hover:bg-opacity-80 focus:bg-blue-50 focus:bg-opacity-80 active:bg-gray-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none"
+            >
+              <div class="grid place-items-center mr-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  viewBox="0 -960 960 960"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path d="M480-120 200-272v-240L40-600l440-240 440 240v320h-80v-276l-80 44v240L480-120Zm0-332 274-148-274-148-274 148 274 148Zm0 241 200-108v-151L480-360 280-470v151l200 108Zm0-241Zm0 90Zm0 0Z" />
+                </svg>
+              </div>
+              Join Listening Test
+            </div>
+          </.link>
+        </div>
+      </:content>
+    </.dropdown>
+  </div>
+</header>
+<main class="px-4 py-20 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-2xl">
+    <.flash_group flash={@flash} />
+    <%= @inner_content %>
+  </div>
+</main>

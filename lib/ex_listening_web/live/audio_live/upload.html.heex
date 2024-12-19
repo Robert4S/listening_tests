@@ -1,0 +1,89 @@
+<div class="text-center">
+  <.header>
+    Upload File
+  </.header>
+
+  <.simple_form for={@form} phx-change="validate" phx-submit="save">
+    <:actions>
+      <section phx-drop-target={@uploads.audio.ref} class="w-full">
+        <.file_input upload={@uploads.audio} class="w-full">
+          <:label>
+            <div class="flex items-center justify-center w-full">
+              <div class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-white dark:hover:bg-gray-900 dark:bg-black hover:bg-gray-50 dark:border-gray-600 dark:hover:border-gray-500">
+                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                  <svg
+                    class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 20 16"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                    />
+                  </svg>
+                  <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                    <span class="font-semibold">Click to upload</span> or drag and drop
+                  </p>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">
+                    MP3, WAV
+                  </p>
+                </div>
+              </div>
+            </div>
+          </:label>
+        </.file_input>
+      </section>
+    </:actions>
+    <div class="grid grid-cols-2 py-2 px-2 items-center gaps-2">
+      <div>
+        <.label for="file_name"></.label>
+        <input
+          type="text"
+          name="file_name"
+          placeholder="Name to store your file as"
+          value=""
+          class={[
+            "w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6 h-full py-2 px-2",
+            @error == [] && "border-zinc-300 focus:border-zinc-400",
+            @error != [] && "border-rose-400 focus:border-rose-400"
+          ]}
+        />
+      </div>
+
+      <.button phx-disable-with="Saving..." disabled={@error !== []}>Save Upload</.button>
+      <%= for entry <- @uploads.audio.entries do %>
+        <div class="flex items-center w-full h-full col-span-2">
+          <progress
+            value={entry.progress}
+            max="100"
+            class="bg-gray-200 h-full rounded-full w-full"
+          >
+            <%= entry.progress %>%
+          </progress>
+
+          <div
+            role="button"
+            phx-click="cancel-upload"
+            class={[
+              "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
+              "text-sm font-semibold leading-6 text-white active:text-white/80"
+            ]}
+            phx-value-ref={entry.ref}
+            aria-label="cancel"
+          >
+            Cancel
+          </div>
+        </div>
+        <%= for err <- upload_errors(@uploads.audio, entry) do %>
+          <p class="alert alert-danger"><%= error_to_string(err) %></p>
+        <% end %>
+      <% end %>
+    </div>
+  </.simple_form>
+  <.error :for={msg <- @error}><%= msg %></.error>
+</div>

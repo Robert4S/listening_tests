@@ -1,0 +1,10 @@
+https://bcglistening.live:443 {
+	reverse_proxy localhost:4000
+	tls {
+		dns cloudflare -Eom3PnEV5tkP1QspooizEqgqeWE0ni22Tx_Vs2D
+	}
+}
+
+:80 {
+	reverse_proxy localhost:4000
+}

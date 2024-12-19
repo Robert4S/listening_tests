@@ -1,0 +1,34 @@
+<div class="justify-center">
+  <h1 class="text-balance text-center text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
+    <%= case @listening_test do %>
+      <% :none -> %>
+        No file uploaded
+      <% _ -> %>
+        Classroom code: <%= @classroom_code %>
+    <% end %>
+  </h1>
+  <div class="grid grid-cols-3 xl:grid-cols-5 gap-4 px-4 py-4">
+    <%= for student <- @students do %>
+      <div class="w-full flex h-24 bg-green-400 rounded-xl justify-center items-center text-bold text-center text-xl">
+        <%= student.name %> <%= student.surname %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="grid grid-cols-3 xl:grid-cols-5 gap-4 px-4 py-4">
+    <%= for student <- @missing do %>
+      <div class="w-full bg-red-400 flex h-24 rounded-xl justify-center items-center text-bold text-center text-xl">
+        <%= student.name %> <%= student.surname %>
+      </div>
+    <% end %>
+  </div>
+
+  <audio
+    controls
+    phx-hook="MasterAudioHook"
+    class="block w-full max-w-md mx-auto rounded-md"
+    id="master-audio"
+    src={"/uploads/#{@listening_test.path}"}
+  >
+  </audio>
+</div>

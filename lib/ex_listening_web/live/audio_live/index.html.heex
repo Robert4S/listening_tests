@@ -1,0 +1,119 @@
+<div class="justify-center">
+  <h1 class="text-balance text-center text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
+    <%= case @uploaded_file do %>
+      <% :none -> %>
+        No file uploaded
+      <% {:some, _} -> %>
+        Classroom code: <%= @classroom_code %>
+    <% end %>
+  </h1>
+  <div class="grid grid-cols-3 xl:grid-cols-5 gap-4 px-4 py-4">
+    <%= for student <- @students do %>
+      <div class="w-full flex h-24 bg-gray-200 rounded-xl justify-center items-center text-bold text-center text-xl">
+        <%= student %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="w-full justify-center">
+    <form
+      class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 justify-center grid gap-y-4"
+      phx-change="validate"
+      phx-submit="save"
+    >
+      <.file_input upload={@uploads.audio}>
+        <:label>
+          <div class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 w-full inline-block rounded focus:outline-none focus:shadow-outline">
+            Choose Audio File
+          </div>
+        </:label>
+      </.file_input>
+      <%= for _ <- @uploads.audio.entries do %>
+        <button
+          type="submit"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full focus:outline-none focus:shadow-outline"
+        >
+          Upload
+        </button>
+      <% end %>
+      <%= for entry <- @uploads.audio.entries do %>
+        <div class="flex items-center w-full">
+          <progress value={entry.progress} max="100" class="bg-gray-200 h-full rounded-full">
+            <%= entry.progress %>%
+          </progress>
+
+          <button
+            type="button"
+            phx-click="cancel-upload"
+            class="flex justify-center"
+            phx-value-ref={entry.ref}
+            aria-label="cancel"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="0.8em"
+              height="0.8em"
+              viewBox="0 0 24 24"
+              class="bg-red-500 hover:bg-red-700 text-white font-bold rounded text-3xl focus:outline-none focus:shadow-outline"
+            >
+              <path
+                fill="currentColor"
+                d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m-3.4 14L12 13.4L8.4 17L7 15.6l3.6-3.6L7 8.4L8.4 7l3.6 3.6L15.6 7L17 8.4L13.4 12l3.6 3.6z"
+              />
+            </svg>
+          </button>
+        </div>
+        <%= for err <- upload_errors(@uploads.audio, entry) do %>
+          <p class="alert alert-danger"><%= error_to_string(err) %></p>
+        <% end %>
+      <% end %>
+    </form>
+    <div class="flex justify-center">
+      <%= case @playback do %>
+        <% :none -> %>
+          <svg
+            class="hover:text-gray-700 text-black"
+            xmlns="http://www.w3.org/2000/svg"
+            width="6em"
+            height="6em"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill="currentColor"
+              d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2s7.071 0 8.535 1.464C22 4.93 22 7.286 22 12s0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12"
+            />
+          </svg>
+        <% :played -> %>
+          <button phx-click="pause">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="6em"
+              height="6em"
+              viewBox="0 0 24 24"
+              class="hover:text-gray-700 text-black"
+            >
+              <path
+                fill="currentColor"
+                d="M2 6c0-1.886 0-2.828.586-3.414S4.114 2 6 2s2.828 0 3.414.586S10 4.114 10 6v12c0 1.886 0 2.828-.586 3.414S7.886 22 6 22s-2.828 0-3.414-.586S2 19.886 2 18zm12 0c0-1.886 0-2.828.586-3.414S16.114 2 18 2s2.828 0 3.414.586S22 4.114 22 6v12c0 1.886 0 2.828-.586 3.414S19.886 22 18 22s-2.828 0-3.414-.586S14 19.886 14 18z"
+              />
+            </svg>
+          </button>
+        <% :paused -> %>
+          <button phx-click="play">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="6em"
+              height="6em"
+              viewBox="0 0 24 24"
+              class="hover:text-gray-700 text-black"
+            >
+              <path
+                fill="currentColor"
+                d="M21.409 9.353a2.998 2.998 0 0 1 0 5.294L8.597 21.614C6.534 22.737 4 21.277 4 18.968V5.033c0-2.31 2.534-3.769 4.597-2.648z"
+              />
+            </svg>
+          </button>
+      <% end %>
+    </div>
+  </div>
+</div>
